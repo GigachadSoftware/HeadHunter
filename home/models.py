@@ -125,6 +125,7 @@ class CustomUserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
+    id = models.BigAutoField(primary_key=True, unique=True, default=0)
     email = models.EmailField(db_index=True, unique=True, max_length=256)
     first_name = models.CharField(max_length=64)
     last_name = models.CharField(max_length=64)
