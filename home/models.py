@@ -48,7 +48,7 @@ class CustomUserManager(BaseUserManager):
         phone_number=None,
         city=None,
         birthday=None,
-        photo: str | None = None,
+        photo: str = None,
         **kwargs,
     ) -> "User":
         user = self.model(
