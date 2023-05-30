@@ -1,0 +1,388 @@
+@import url("https://fonts.googleapis.com/css2?family=Flow+Circular&family=Poppins:wght@700&family=Roboto:wght@400;700&display=swap");
+body > header hr, body, .vacancy > hr, .button, textarea, select, input, .gap {
+  appearance: none;
+  border: none;
+  outline: none;
+  padding: 0;
+  margin: 0;
+  font-family: inherit;
+  font-size: inherit;
+  cursor: inherit;
+  line-height: inherit;
+  background-color: transparent;
+  color: inherit;
+  text-decoration: none;
+  font-style: normal;
+}
+
+.vacancy > header {
+  display: flex;
+  flex-direction: row;
+}
+
+body > main form.row, body > main > div, body > header, .brief_summary > div:last-child, .candidate, .button, .input {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+body > footer, .profile > div, .brief_summary, .card {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+}
+
+.profile > div #photo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+body > footer > div, body > main article, body > main form, body > main, body, .vacancy > header > div, .vacancy, .card > div {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.gap {
+  width: 0;
+  height: 0;
+  margin: auto;
+}
+
+/*
+font-family: 'Flow Circular', cursive;
+font-family: 'Poppins', sans-serif;
+font-family: 'Roboto', sans-serif;
+*/
+:root {
+  --background: #1D1E1F;
+  --section: #292B2F;
+  --foreground: #FFFFFF;
+  --accent: #2CA6FF;
+  --disturb: #FF2C2C;
+  --success: #20ff45;
+}
+
+input {
+  background-color: transparent;
+  outline: 1px solid var(--foreground);
+  border-radius: 1.5rem;
+  height: 1rem;
+  padding: 0.75rem 1rem;
+}
+input:focus {
+  outline: 2px solid var(--foreground);
+}
+
+.input {
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+.input > label {
+  font-weight: bold;
+}
+
+select {
+  position: relative;
+  background-color: var(--section);
+  color: var(--foreground);
+  outline: 1px solid var(--foreground);
+  border-radius: 1.5rem;
+  padding: 0.75rem 2.5rem 0.75rem 1rem;
+}
+select:focus {
+  outline: 2px solid var(--foreground);
+}
+
+textarea {
+  background-color: transparent;
+  outline: 1px solid var(--foreground);
+  border-radius: 1.5rem;
+  padding: 1rem;
+  width: 100%;
+  resize: vertical;
+}
+textarea:focus {
+  outline: 2px solid var(--foreground);
+}
+
+.select {
+  position: relative;
+}
+.select select {
+  width: 24rem;
+}
+.select .arrow {
+  position: absolute;
+  right: 1rem;
+  top: 1.125rem;
+  width: 0;
+  height: 0;
+  border-left: 0.5rem solid transparent;
+  border-right: 0.5rem solid transparent;
+  border-top: 0.5rem solid var(--foreground);
+}
+
+.button {
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  border-radius: 1rem;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: bold;
+}
+.button i {
+  transform: translateY(2px);
+  font-size: 1rem;
+}
+.button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+.button:hover span {
+  text-decoration: underline;
+}
+.button:focus, .button[data-selected="1"] {
+  color: var(--accent);
+}
+.button.submit {
+  background-color: var(--accent);
+}
+.button.submit.transparent {
+  background-color: transparent;
+  color: var(--accent);
+}
+.button.large {
+  padding: 2rem;
+  background-color: var(--accent);
+}
+
+.card {
+  background-color: var(--section);
+  color: var(--foreground);
+  text-decoration: none;
+  padding: 1rem 1rem 3rem 1rem;
+  border-radius: 1rem;
+  gap: 1rem;
+  position: relative;
+}
+.card > img {
+  width: 6rem;
+  height: 6rem;
+  border-radius: 1rem;
+}
+.card > div {
+  gap: 0.5rem;
+}
+.card > div h1 {
+  margin: 0;
+}
+.card > span {
+  position: absolute;
+  white-space: nowrap;
+  right: 1rem;
+  bottom: 1rem;
+  opacity: 0.3;
+}
+
+.vacancy {
+  gap: 2rem;
+}
+.vacancy > hr {
+  width: 100%;
+  height: 2px;
+  background-color: var(--section);
+}
+.vacancy > header {
+  gap: 2rem;
+}
+.vacancy > header > div {
+  justify-content: center;
+  gap: 1rem;
+}
+.vacancy > header > div:nth-child(1) h1 {
+  margin: 0;
+}
+.vacancy > header > div:nth-child(1) > span {
+  font-size: 1.5rem;
+}
+.vacancy > header > div:nth-child(1) > em {
+  font-style: normal;
+  opacity: 0.3;
+}
+.vacancy > header > div:nth-child(2) strong {
+  font-weight: normal;
+}
+.vacancy > header > div:nth-child(2) span {
+  font-weight: bold;
+  color: var(--accent);
+}
+.vacancy > header img {
+  height: 20rem;
+  width: 30rem;
+  object-fit: cover;
+}
+.vacancy > a {
+  margin-left: auto;
+}
+
+.candidate {
+  background-color: rgba(32, 255, 69, 0.15);
+  color: rgb(32, 255, 69);
+  border: 1px solid rgb(32, 255, 69);
+  border-radius: 1rem;
+  padding: 0.5rem 1rem;
+  gap: 1rem;
+}
+.candidate em {
+  font-style: normal;
+  opacity: 0.3;
+}
+.candidate .button {
+  padding: 0.5rem 1rem;
+  margin-left: auto;
+}
+
+.brief_summary {
+  color: var(--foreground);
+  text-decoration: none;
+  background-color: var(--section);
+  padding: 1rem 2rem;
+  border-radius: 1rem;
+  gap: 4rem;
+}
+.brief_summary h1 {
+  margin: 0;
+}
+.brief_summary > div:last-child {
+  justify-content: center;
+  align-items: center;
+  font-size: 2rem;
+  font-weight: bold;
+  gap: 1rem;
+}
+.brief_summary > div:last-child i {
+  transform: translateY(4px);
+}
+
+.profile {
+  background-color: var(--section);
+}
+.profile > div > table {
+  border-collapse: collapse;
+}
+.profile > div > table td:first-child {
+  font-weight: bold;
+  opacity: 0.3;
+}
+.profile > div > table td {
+  padding: 0.5rem 1rem;
+}
+.profile > div #photo {
+  gap: 2rem;
+}
+.profile > div img {
+  border-radius: 100%;
+  width: 6rem;
+}
+.profile > div span.success {
+  color: var(--success);
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: "Roboto", sans-serif;
+}
+body > header {
+  align-items: center;
+  font-weight: bold;
+  gap: 1rem;
+}
+body > header h1 {
+  font-family: "Poppins", sans-serif;
+  margin: 0;
+  padding: 0 1rem;
+  font-size: 2rem;
+}
+body > header hr {
+  height: 2rem;
+  min-width: 2px;
+  background-color: var(--foreground);
+}
+body > header .button {
+  border-radius: 0 0 1rem 1rem;
+}
+body > main {
+  margin: 4rem auto;
+  width: fit-content;
+  max-width: 70rem;
+  gap: 0.5rem;
+  min-height: calc(100vh - 27.75rem);
+}
+body > main > div {
+  gap: 1rem;
+}
+body > main > div > h1 {
+  font-size: 1rem;
+  margin: 0;
+}
+body > main > div > .button {
+  margin-left: auto;
+}
+body > main > h1 {
+  margin: 0;
+  font-size: 1rem;
+}
+body > main form {
+  background-color: var(--section);
+  padding: 1rem;
+  position: relative;
+  border-radius: 1rem;
+  gap: 1rem;
+}
+body > main form.row > input {
+  width: 100%;
+}
+body > main article {
+  padding: 1rem;
+  border-radius: 1rem;
+  gap: 1rem;
+}
+body > main article form {
+  padding: 0;
+}
+body > main article > h1 {
+  font-size: 1rem;
+  margin: 0;
+}
+body > main article.article {
+  background-color: var(--section);
+}
+body > footer {
+  background-color: var(--section);
+  padding: 4rem;
+}
+body > footer > div {
+  gap: 0.5rem;
+}
+body > footer > div > h1 {
+  font-family: "Poppins", sans-serif;
+  margin: 0;
+}
+body > footer > div > div {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  grid-column-gap: 1rem;
+  grid-row-gap: 0.5rem;
+}
+body > footer > strong {
+  font-family: "Poppins", sans-serif;
+  text-align: right;
+  margin-left: auto;
+  margin-top: auto;
+}
+
+/*# sourceMappingURL=main.css.map */

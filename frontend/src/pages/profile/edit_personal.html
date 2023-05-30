@@ -1,0 +1,58 @@
+{% extends "root.html" %}
+{% load static %}
+
+{% block head %}
+<script defer>
+    function load() {
+        const city_selection = document.querySelector("#city");
+        if (city_selection) {
+            city_selection.childNodes.forEach(option => {
+                if (option.value === city_selection.dataset?.city) {
+                    option.selected = true;
+                }
+            });
+        }
+    }
+
+    function wait() {
+        let city = document.querySelector("#city");
+        if (city) {
+            load();
+        } else {
+            setTimeout(wait, 100);
+        }
+    }
+
+    wait();
+</script>
+{% endblock head %}
+
+{% block body %}
+<form action="/profile/personal/edit/" method="post">
+    {% csrf_token %}
+    <strong>{{ user.first_name }} {{ user.last_name }}</strong>
+    <input type="tel" name="phone_number" value="{{ user.phone_number }}" placeholder="Номер телефону" pattern="+380[0-9]{3}[0-9]{3}[0-9]{4}" required>
+    <div class="select">
+        <select name="city" id="city">
+            {% include "datalists/cities.html" %}
+        </select>
+        <label for="city" class="arrow"></label>
+    </div>
+    <input type="date" name="birthday" value="{{ user.get_birthday }}" required>
+    <div class="select">
+        <select name="role" id="role">
+            <option value="W" {% if user.role == "W" %}selected{% endif %}>Робітник</option>
+            <option value="E" {% if user.role == "E" %}selected{% endif %}>Роботодавець</option>
+        </select>
+        <label for="role" class="arrow"></label>
+    </div>
+    <button type="submit" class="button submit transparent">
+        <i class="fi fi-sr-select"></i>
+        <span>Змінити</span>
+    </button>
+    <span class="error">{{ error }}</span>
+    <datalist id="cities">
+        {% include "datalists/cities.html" %}
+    </datalist>
+</form>
+{% endblock body %}

@@ -1,0 +1,35 @@
+{% extends "root.html" %}
+{% load static %}
+
+{% block head %}
+{% endblock head %}
+
+{% block body %}
+<article>
+    <h1>Резюме {{ owner.first_name }} {{ owner.last_name }}</h1>
+</article>
+<article>
+    <ul>
+        <li>
+            <strong>Освіта:</strong>
+            <span>{{ summary.get_education }}</span>
+        </li>
+        <li>
+            <strong>Професія:</strong>
+            <span>{{ summary.profession }}</span>
+        </li>
+        <li>
+            <strong>Окінчив освіту:</strong>
+            <span>{{ summary.end_of_education }}</span>
+        </li>
+        <li>
+            <strong>Місто:</strong>
+            <span>{{ summary.get_city }}</span>
+        </li>
+        <li>
+            <strong>Навички:</strong>
+            <span>{{ summary.skills }}</span>
+        </li>
+    </ul>
+</article>
+{% endblock body %}

@@ -1,0 +1,34 @@
+{% extends "root.html" %}
+{% load static %}
+
+{% block head %}
+{% endblock head %}
+
+{% block body %}
+<article>
+    <h1>Ласкаво просимо, {{ user.first_name }}!</h1>
+</article>
+<article class="article">
+    {% if user.role == "W" %}
+    <a class="button large" href="/profile/summary/">
+        <i class="fi fi-sr-file"></i>
+        <span>Резюме</span>
+    </a>
+    {% else %}
+    <a class="button large" href="/profile/vacancies/">
+        <i class="fi fi-sr-file"></i>
+        <span>Ваканції</span>
+    </a>
+    {% endif %}
+    <a class="button large" href="/profile/personal/">
+        <i class="fi fi-sr-file-circle-info"></i>
+        <span>Особисті дані</span>
+    </a>
+    <form action="/oauth/logout/" method="post">
+        {% csrf_token %}
+        <button class="button transparent" type="submit">
+            <span>Вихід з аккаунту</span>
+        </button>
+    </form>
+</article>
+{% endblock body %}

@@ -1,0 +1,38 @@
+{% extends "root.html" %}
+{% load static %}
+
+{% block head %}
+{% endblock head %}
+
+{% block body %}
+<form action="/profile/summary/new/" method="post">
+    {% csrf_token %}
+    <label for="education">Освіта:</label>
+    <select name="education" id="education" required>
+        <option value="E">Дошкільна</option>
+        <option value="D">Повна загальна середня</option>
+        <option value="C">Професійна</option>
+        <option value="B">Фахова передвища</option>
+        <option value="A">Вища</option>
+    </select>
+
+    <label for="profession">Професія</label>
+    <input type="text" name="profession" id="profession" maxlength="64" required>
+    
+    <label for="city">Навчальний заклад:</label>
+    <select name="city" id="city">
+        {% include "datalists/cities.html" %}
+    </select>
+
+    <label for="end_of_education">Дата окінчення навчання</label>
+    <input type="date" name="end_of_education" id="end_of_education" required>
+
+    <label for="skills">Навички</label>
+    <input type="text" name="skills" id="skills" maxlength="256" required>
+
+    <button type="submit" class="button submit">
+        <i class="fi fi-sr-select"></i>
+        <span>Створити</span>
+    </button>
+</form>
+{% endblock body %}

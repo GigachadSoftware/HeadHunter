@@ -1,0 +1,60 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-solid-rounded/css/uicons-solid-rounded.css'>
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-bold-straight/css/uicons-bold-straight.css'>
+    <link rel="stylesheet" href="{% static 'styles/main.css' %}">
+    <title>{{ page }}</title>
+    {% block head %}
+    {% endblock head %}
+</head>
+
+<body>
+<header>
+    <h1>hh.ua</h1>
+    <hr>
+    <a class="button" href="/" data-selected="{% if page == 'home' %}1{% endif %}">
+        <i class="fi fi-sr-home"></i>
+        <span>Головна</span>
+    </a>
+
+    <span class="gap"></span>
+
+    {% if not user.is_authenticated %}
+    <a class="button" href="/oauth/google/login" data-selected="{% if page == 'user' %}1{% endif %}">
+        <i class="fi fi-sr-user"></i>
+        <span>Увійти</span>
+    </a>
+    {% else %}
+    <a class="button" href="/profile" data-selected="{% if page == 'user' %}1{% endif %}">
+        <i class="fi fi-sr-user"></i>
+        <span>{{ user.first_name }} {{ user.last_name }}</span>
+    </a>
+    {% endif %}
+</header>
+<main>
+    {% block body %}
+    {% endblock body %}
+</main>
+<footer>
+    <div>
+        <h1>GigaChad Software</h1>
+        <div>
+            <span>Михайло Овчаренко</span>
+            <span>Вадим Сорокін</span>
+            <span>Максим Крикуха</span>
+            <span>Іван Бургард</span>
+            <span>Ілля Кучук</span>
+            <span>Валерій Бурдуленко</span>
+        </div>
+    </div>
+    <strong>HeadHunter</strong>
+</footer>
+</body>
+
+</html>

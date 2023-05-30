@@ -1,0 +1,28 @@
+{% extends "root.html" %}
+{% load static %}
+
+{% block head %}
+{% endblock head %}
+
+{% block body %}
+<div>
+    <h1>Мої резюме</h1>
+    <a href="/profile/summary/new/" class="button submit transparent">
+        <i class="fi fi-sr-plus-small"></i>
+        <span>Додати</span>
+    </a>
+</div>
+{% for summary in summaries %}
+<a href="/summary/@{{ summary.id }}/" class="brief_summary">
+    <div>
+        <h1>{{ summary.profession }}</h1>
+        <span>{{ summary.skills }}</span>
+        <span>{{ summary.get_education }} - {{ summary.end_of_education }}</span>
+    </div>
+    <div>
+        <i style="opacity: 0.1;" class="fi fi-sr-eye"></i>
+        {{ summary.get_view_count }}
+    </div>
+</a>
+{% endfor %}
+{% endblock body %}

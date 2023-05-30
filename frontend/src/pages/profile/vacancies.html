@@ -1,0 +1,29 @@
+{% extends "root.html" %}
+{% load static %}
+
+{% block head %}
+{% endblock head %}
+
+{% block body %}
+<div>
+    <h1>Мої ваканції</h1>
+    <a href="/profile/vacancy/new/" class="button submit transparent">
+        <i class="fi fi-sr-plus-small"></i>
+        <span>Додати</span>
+    </a>
+</div>
+{% for search_result in vacancies %}
+<a class="card" href="/vacancy/@{{ search_result.id }}/">
+    {% if search_result.photo %}
+    <img src="{{ search_result.photo }}" alt="">
+    {% else %}
+    <img src="{% static 'images/user_placeholder.jpg' %}" alt="">
+    {% endif %}
+    <div>
+        <h1>{{ search_result.title }}</h1>
+        <span>{{ search_result.description }}</span>
+    </div>
+    <span>{{ search_result.creation_time }} - {{ search_result.publisher }}</span>
+</a>
+{% endfor %}
+{% endblock body %}

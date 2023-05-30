@@ -1,0 +1,61 @@
+{% extends "root.html" %}
+{% load static %}
+
+{% block head %}
+{% endblock head %}
+
+{% block body %}
+<article>
+    <h1>Особисті дані</h1>
+</article>
+<article class="profile">
+    <h1>{{ user.first_name }} {{ user.last_name }}</h1>
+    <div>
+        <table>
+            <tr>
+                <td>Дата народження:</td>
+                <td>{{ user.birthday }}</td>
+            </tr>
+            <tr>
+                <td>Телефон:</td>
+                <td>{{ user.phone_number }}</td>
+            </tr>
+            <tr>
+                <td>Місто проживання:</td>
+                <td>{{ user.get_city }}</td>
+            </tr>
+            <tr>
+                <td>Роль:</td>
+                {% if user.role == "W" %}
+                <td>Робітник</td>
+                {% elif user.role == "E" %}
+                <td>Роботодавець</td>
+                {% elif user.role == "S" %}
+                <td>Суперкористувач</td>
+                {% endif %}
+            </tr>
+            <tr>
+                <td>Ел. пошта:</td>
+                {% if email_verified %}
+                <td>{{ user.email }} <span class="success">(Підтверджено)</span></td>
+                {% else %}
+                <td>{{ user.email }} <span class="distrurb">(Не підтверджено)</span></td>
+                {% endif %}
+            </tr>
+        </table>
+        <div id="photo">
+            {% if user.photo %}
+            <img src="{{ user.photo }}" alt="">
+            {% elif picture %}
+            <img src="{{ picture }}" alt="">
+            {% else %}
+            <img src="{% static 'images/user_placeholder.jpg' %}" alt="">
+            {% endif %}
+            <a href="/profile/personal/edit/" class="button submit transparent">
+                <i class="fi fi-bs-pencil"></i>
+                <span>Редагувати</span>
+            </a>
+        </div>
+    </div>
+</article>
+{% endblock body %}

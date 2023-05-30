@@ -1,0 +1,56 @@
+{% extends "root.html" %}
+{% load static %}
+
+{% block head %}
+{% endblock head %}
+
+{% block body %}
+<form action="" method="post">
+    {% csrf_token %}
+    <div class="input">
+        <label for="title">Заголовок:</label>
+        <input type="text" name="title" id="title" value="{{ vacancy.title }}" required>
+    </div>
+    <div class="select">
+        <select name="city" id="city" data-city="{{ vacancy.city }}">
+            {% include "datalists/cities.html" %}
+        </select>
+        <label for="city" class="arrow"></label>
+    </div>
+    <div class="select">
+        <select name="type" id="type">
+            <option value="R" {% if vacancy.type == "R" %}selected{% endif %}>Дистанційна</option>
+            <option value="F" {% if vacancy.type == "F" %}selected{% endif %}>Повна зайнятість</option>
+            <option value="P" {% if vacancy.type == "P" %}selected{% endif %}>Часткова зайнятість</option>
+            <option value="N" {% if vacancy.type == "N" %}selected{% endif %}>Фріланс</option>
+        </select>
+        <label for="type" class="arrow"></label>
+    </div>
+    <div class="input">
+        <label for="looking_for">Шукається:</label>
+        <input type="text" name="looking_for" id="looking_for" value="{{ vacancy.looking_for }}" required>
+    </div>
+    <div class="input">
+        <label for="description">Опис:</label>
+        <textarea name="description" id="description" required>{{ vacancy.description }}</textarea>
+    </div>
+    <div class="input">
+        <label for="thumbnail">Зображення:</label>
+        <input type="url" name="thumbnail" id="thumbnail" value="{{ vacancy.thumbnail }}" required>
+    </div>
+
+    <button class="button submit" type="submit">
+        <i class="fi fi-sr-select"></i>
+        <span>Змінити</span>
+    </button>
+
+    <a class="button danger" href="/vacancy/@{{ vacancy.id }}/delete/">
+        <i class="fi fi-sr-delete-document"></i>
+        <span>Видалити</span>
+    </a>
+
+    <datalist id="cities">
+        {% include "datalists/cities.html" %}
+    </datalist>
+</form>
+{% endblock body %}
