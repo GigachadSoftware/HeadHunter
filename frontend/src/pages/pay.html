@@ -6,25 +6,25 @@
 
 {% block body %}
 <form action="" method="post">
-    {% csrf_token %}
+
     <input type="hidden" name="data" value="{{ data }}">
     <input type="hidden" name="signature" value="{{ signature }}">
     <button type="submit">Pay</button>
 </form>
 <div id="liqpay_checkout"></div>
 <script>
-    window.LiqPayCheckoutCallback = function() {
+    window.LiqPayCheckoutCallback = function () {
         LiqPayCheckout.init({
             data: "{{ data }}",
             signature: "{{ signature }}",
             embedTo: "#liqpay_checkout",
             mode: "embed" // embed || popup,
-        }).on("liqpay.callback", function(data){
+        }).on("liqpay.callback", function (data) {
             console.log(data.status);
             console.log(data);
-        }).on("liqpay.ready", function(data){
+        }).on("liqpay.ready", function (data) {
             // ready
-        }).on("liqpay.close", function(data){
+        }).on("liqpay.close", function (data) {
             // close
         });
     };

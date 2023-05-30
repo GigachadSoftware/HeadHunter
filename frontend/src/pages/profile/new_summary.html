@@ -6,7 +6,7 @@
 
 {% block body %}
 <form action="/profile/summary/new/" method="post">
-    {% csrf_token %}
+
     <label for="education">Освіта:</label>
     <select name="education" id="education" required>
         <option value="E">Дошкільна</option>
@@ -18,7 +18,7 @@
 
     <label for="profession">Професія</label>
     <input type="text" name="profession" id="profession" maxlength="64" required>
-    
+
     <label for="city">Навчальний заклад:</label>
     <select name="city" id="city">
         {% include "datalists/cities.html" %}

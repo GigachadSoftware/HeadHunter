@@ -7,8 +7,9 @@
 {% block body %}
 <h1>Створити аккаунт</h1>
 <form action="/sign_up/" method="post">
-    {% csrf_token %}
-    <input type="tel" name="phone_number" value="{{ form.phone_number }}" placeholder="Номер телефону" pattern="+380[0-9]{3}[0-9]{3}[0-9]{4}" required>
+
+    <input type="tel" name="phone_number" value="{{ form.phone_number }}" placeholder="Номер телефону"
+        pattern="+380[0-9]{3}[0-9]{3}[0-9]{4}" required>
     <input type="text" name="city" value="{{ form.city }}" list="cities" placeholder="Місто" required>
     <input type="date" name="birthday" value="{{ form.birthday }}" required>
     <button type="submit" class="button submit">

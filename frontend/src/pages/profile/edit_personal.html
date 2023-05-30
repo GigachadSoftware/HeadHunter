@@ -29,9 +29,10 @@
 
 {% block body %}
 <form action="/profile/personal/edit/" method="post">
-    {% csrf_token %}
+
     <strong>{{ user.first_name }} {{ user.last_name }}</strong>
-    <input type="tel" name="phone_number" value="{{ user.phone_number }}" placeholder="Номер телефону" pattern="+380[0-9]{3}[0-9]{3}[0-9]{4}" required>
+    <input type="tel" name="phone_number" value="{{ user.phone_number }}" placeholder="Номер телефону"
+        pattern="+380[0-9]{3}[0-9]{3}[0-9]{4}" required>
     <div class="select">
         <select name="city" id="city">
             {% include "datalists/cities.html" %}
@@ -41,8 +42,8 @@
     <input type="date" name="birthday" value="{{ user.get_birthday }}" required>
     <div class="select">
         <select name="role" id="role">
-            <option value="W" {% if user.role == "W" %}selected{% endif %}>Робітник</option>
-            <option value="E" {% if user.role == "E" %}selected{% endif %}>Роботодавець</option>
+            <option value="W" {% if user.role=="W" %}selected{% endif %}>Робітник</option>
+            <option value="E" {% if user.role=="E" %}selected{% endif %}>Роботодавець</option>
         </select>
         <label for="role" class="arrow"></label>
     </div>

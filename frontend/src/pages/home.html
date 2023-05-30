@@ -7,16 +7,16 @@
 {% block body %}
 <h1>Сайт пошуку роботи №1 в Україні</h1>
 <form action="/" method="post" class="row">
-    {% csrf_token %}
+
     <input type="text" name="description" placeholder="Посада" value="{{ form.description }}">
     <input type="text" name="city" list="cities" placeholder="Місто" value="{{ form.city }}">
     <div class="select">
         <select name="job_type" id="job_type">
-            <option value="" {% if form.job_type == "" %}selected{% endif %}>-- Будь яка зайнятість --</option>
-            <option value="R" {% if form.job_type == "R" %}selected{% endif %}>Дистанційна</option>
-            <option value="F" {% if form.job_type == "F" %}selected{% endif %}>Повна зайнятість</option>
-            <option value="P" {% if form.job_type == "P" %}selected{% endif %}>Часткова зайнятість</option>
-            <option value="N" {% if form.job_type == "N" %}selected{% endif %}>Фріланс</option>
+            <option value="" {% if form.job_type=="" %}selected{% endif %}>-- Будь яка зайнятість --</option>
+            <option value="R" {% if form.job_type=="R" %}selected{% endif %}>Дистанційна</option>
+            <option value="F" {% if form.job_type=="F" %}selected{% endif %}>Повна зайнятість</option>
+            <option value="P" {% if form.job_type=="P" %}selected{% endif %}>Часткова зайнятість</option>
+            <option value="N" {% if form.job_type=="N" %}selected{% endif %}>Фріланс</option>
         </select>
         <label for="job_type" class="arrow"></label>
     </div>
