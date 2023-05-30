@@ -6,6 +6,7 @@
 
 {% block body %}
 <form action="" method="post">
+    {% csrf_token %}
     <input type="hidden" name="data" value="{{ data }}">
     <input type="hidden" name="signature" value="{{ signature }}">
     <button type="submit">Pay</button>
