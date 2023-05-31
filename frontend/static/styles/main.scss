@@ -16,8 +16,36 @@ font-family: 'Roboto', sans-serif;
     --success: #20ff45;
 }
 
+#payment {
+    @extend %colC;
+    justify-content: center;
+    position: absolute;
+    z-index: 1024;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgb(0 0 0 / 0.4);
+    backdrop-filter: blur(0.5rem);
+
+    h1 {
+        font-size: 2rem;
+        font-weight: bold;
+    }
+
+    a {
+        color: var(--accent);
+    }
+}
+
 .gap {
     @extend %gap;
+}
+
+.premium_sign {
+    margin-left: auto;
+    font-weight: bold;
+    color: var(--success);
 }
 
 input {
@@ -123,6 +151,10 @@ textarea {
         background-color: var(--accent);
     }
 
+    &.premium {
+        color: #ffc020;
+    }
+
     &.submit.transparent {
         background-color: transparent;
         color: var(--accent);
@@ -173,6 +205,11 @@ textarea {
 .vacancy {
     @extend %colS;
     gap: 2rem;
+
+    & > form {
+        @extend %reset;
+        margin-left: auto;
+    }
 
     & > hr {
         @extend %reset;

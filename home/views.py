@@ -1,20 +1,16 @@
-import base64
-import json
-
 from allauth.socialaccount.models import SocialAccount
-from django.shortcuts import redirect, render
-from django.http import HttpResponse
 from django.core.handlers.wsgi import WSGIRequest
+from django.http import HttpResponse
+from django.shortcuts import redirect, render
 from django.utils import timezone
-from django.utils.decorators import method_decorator
-from django.views import View
-from django.views.decorators.csrf import csrf_exempt
-from django.views.generic import TemplateView
-from liqpay3 import liqpay
 from liqpay3.liqpay import LiqPay
 
+from headhunter.urls import GLOBAL_TOKEN
 from home.forms import NewSummaryForm, SignUpForm, VacancyForm
 from home.models import Summary, User, Vacancy
+
+api = LiqPay("sandbox_i54579029593", "sandbox_EHx0Sf9PVpL9eqE4rcapQHGT2jJj1siOMQgGbPms")
+LIQPAY = LiqPay("sandbox_i54579029593", "sandbox_EHx0Sf9PVpL9eqE4rcapQHGT2jJj1siOMQgGbPms")
 
 
 def render_home(request: WSGIRequest) -> HttpResponse:
@@ -23,6 +19,24 @@ def render_home(request: WSGIRequest) -> HttpResponse:
             if request.user.city is None:
                 return redirect(render_sign_up)
 
+            if request.session.get("ORDER_ID"):
+                response: dict = api.api("request/", {
+                    "action": "status",
+                    "version": "3",
+                    "order_id": request.session.get("ORDER_ID")
+                })
+                if response.get("result") == "ok":
+                    order_id: str = request.session.get("ORDER_ID").split("@")[1]
+                    request.session["ORDER_ID"] = None
+                    vacancy: Vacancy = None if not order_id.isnumeric() else Vacancy.objects.filter(id=int(order_id)).first()
+                    if vacancy:
+                        vacancy.is_premium = True
+                        vacancy.save()
+                    return render(request, "pages/home.html", {"page": "home", "order_info": {
+                        "vacancy": vacancy,
+                        "extra": response,
+                    }})
+
         return render(request, "pages/home.html", {"page": "home"})
 
     vacancies = Vacancy.objects.all()
@@ -30,12 +44,13 @@ def render_home(request: WSGIRequest) -> HttpResponse:
         vacancies = vacancies.filter(city=request.POST["city"])
     if request.POST.get("job_type"):
         vacancies = vacancies.filter(type=request.POST["job_type"])
-    result = vacancies
+    result = [v for v in vacancies]
     if request.POST.get("description"):
         result = []
         for vacancy in vacancies:
             if request.POST.get("description").lower() in vacancy.looking_for.lower():
                 result.append(vacancy)
+    result.sort(key=lambda v: v.is_premium, reverse=True)
     return render(
         request, "pages/home.html", {"search_results": result, "form": request.POST}
     )
@@ -51,11 +66,11 @@ def render_sign_up(request: WSGIRequest) -> HttpResponse:
             request,
             "pages/sign_up.html",
             {
-                "page": "user",
-                "form": {
+                "page" : "user",
+                "form" : {
                     "phone_number": form.phone_number,
-                    "city": form.city,
-                    "birthday": form.birthday,
+                    "city"        : form.city,
+                    "birthday"    : form.birthday,
                 },
                 "error": "Invalid form!",
             },
@@ -71,7 +86,27 @@ def render_vacancy(request: WSGIRequest, vacancy_id: int) -> HttpResponse:
     vacancy = Vacancy.objects.filter(id=vacancy_id).first()
     if not vacancy:
         return redirect(render_home)
-    return render(request, "pages/vacancy.html", {"vacancy": vacancy})
+    request.session["ORDER_ID"] = f"VACANCY:{GLOBAL_TOKEN}@{vacancy_id}"
+    extra = {}
+    if not vacancy.is_premium and request.user.email == vacancy.publisher:
+        extra = {
+            "form": LIQPAY.cnb_form({
+                'action'     : 'pay',
+                'amount'     : '200',
+                'currency'   : 'UAH',
+                'description': f"Активувати Преміум для {vacancy.title}",
+                'order_id'   : f"VACANCY:{GLOBAL_TOKEN}@{vacancy_id}",
+                'version'    : '3',
+                'sandbox'    : 0,
+                'server_url' : 'https://django-server-production-fac1.up.railway.app/',
+            }).replace("""accept-charset="utf-8">""", 'accept-charset="utf-8">').replace(
+                """<input type="image" src="//static.liqpay3.ua/buttons/p1ru.radius.png" name="btn_text" />""",
+                '<button type="submit" class="button premium">'
+                '<i class="fi fi-sr-crown"></i>'
+                '<span>Активувати Преміум</span>'
+                '</button>')
+        }
+    return render(request, "pages/vacancy.html", {"vacancy": vacancy, **extra})
 
 
 def apply_vacancy(request: WSGIRequest, vacancy_id: int):
@@ -148,8 +183,8 @@ def render_profile_personal(request: WSGIRequest) -> HttpResponse:
         "pages/profile/personal.html",
         {
             "email_verified": social_account.extra_data.get("email_verified"),
-            "picture": social_account.extra_data.get("picture"),
-            "page": "user",
+            "picture"       : social_account.extra_data.get("picture"),
+            "page"          : "user",
         },
     )
 
@@ -204,7 +239,7 @@ def render_edit_profile_personal(request: WSGIRequest) -> HttpResponse:
 
     form = SignUpForm(request.POST)
     if not form.is_valid():
-        return render(request, "pages/profile/edit_personal.html", {"page":"user", "error": "Невірна форма"})
+        return render(request, "pages/profile/edit_personal.html", {"page": "user", "error": "Невірна форма"})
 
     request.user.phone_number = form.cleaned_data.get("phone_number")
     request.user.city = form.cleaned_data.get("city")
@@ -242,37 +277,3 @@ def render_new_vacancy(request: WSGIRequest):
     vacancy.thumbnail = form.cleaned_data.get("thumbnail")
     vacancy.save()
     return redirect(f"/vacancy/@{vacancy.id}/")
-
-
-class PayView(TemplateView):
-    template_name = "pages/pay.html"
-
-    def get(self, request, *args, **kwargs):
-        api = LiqPay("sandbox_i54579029593", "sandbox_EHx0Sf9PVpL9eqE4rcapQHGT2jJj1siOMQgGbPms")
-        params = {
-            'action'     : 'pay',
-            'amount'     : '19',
-            'currency'   : 'UAH',
-            'description': 'Testing payment',
-            'order_id'   : 'order_id_1',
-            'version'    : '3',
-            'sandbox'    : 1,  # sandbox mode, set to 1 to enable it
-            'server_url' : 'https://django-server-production-fac1.up.railway.app/pay-callback/',  # url to callback view
-        }
-        signature = api.cnb_signature(params)
-        data = base64.b64encode(json.dumps(params).encode('utf8'))
-        return render(request, self.template_name, {'signature': signature, 'data': data})
-
-@method_decorator(csrf_exempt, name='dispatch')
-class PayCallbackView(View):
-    def post(self, request, *args, **kwargs):
-        liqpay = LiqPay("sandbox_i54579029593", "sandbox_EHx0Sf9PVpL9eqE4rcapQHGT2jJj1siOMQgGbPms")
-        data = request.POST.get('data')
-        signature = request.POST.get('signature')
-        sign = liqpay.str_to_sign(
-            "sandbox_EHx0Sf9PVpL9eqE4rcapQHGT2jJj1siOMQgGbPms" + data + "sandbox_EHx0Sf9PVpL9eqE4rcapQHGT2jJj1siOMQgGbPms")
-        if sign == signature:
-            print('callback is valid')
-        response = liqpay.decode_data_from_str(data)
-        print('callback data', response)
-        return HttpResponse()

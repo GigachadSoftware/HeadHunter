@@ -18,7 +18,5 @@ urlpatterns = [
     path("vacancy/@<int:vacancy_id>/cancel/", cancel_vacancy, name="cancel_vacancy"),
     path("vacancy/@<int:vacancy_id>/edit/", render_edit_vacancy, name="edit_vacancy"),
     path("vacancy/@<int:vacancy_id>/delete/", delete_vacancy, name="delete_vacancy"),
-    path('pay/', PayView.as_view(), name='pay_view'),
-    path('pay-callback/', PayCallbackView.as_view(), name='pay_callback'),
 ]
 

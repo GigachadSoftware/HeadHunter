@@ -40,6 +40,13 @@
         <i class="fi fi-bs-pencil"></i>
         <span>Редагувати</span>
     </a>
+        {% if form %}
+            {% autoescape off %}
+                {{ form }}
+            {% endautoescape %}
+        {% else %}
+            <span class="premium_sign">Преміум ваканція</span>
+        {% endif %}
     <hr>
     {% endif %}
 </div>

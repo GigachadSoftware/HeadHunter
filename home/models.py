@@ -169,6 +169,7 @@ class Vacancy(models.Model):
     thumbnail = models.CharField(max_length=512, null=True, blank=True)
     publisher = models.EmailField()
     candidates = models.ManyToManyField(User, blank=True)
+    is_premium = models.BooleanField(default=0)
 
     def __str__(self):
         return f"<{self.publisher}> {self.title}"

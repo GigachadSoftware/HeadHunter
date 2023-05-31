@@ -1,5 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Flow+Circular&family=Poppins:wght@700&family=Roboto:wght@400;700&display=swap");
-body > header hr, body, .vacancy > hr, .button, textarea, select, input, .gap {
+body > header hr, body, .vacancy > hr, .vacancy > form, .button, textarea, select, input, .gap {
   appearance: none;
   border: none;
   outline: none;
@@ -32,7 +32,7 @@ body > footer, .profile > div, .brief_summary, .card {
   align-items: stretch;
 }
 
-.profile > div #photo {
+.profile > div #photo, #payment {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -62,6 +62,31 @@ font-family: 'Roboto', sans-serif;
   --accent: #2CA6FF;
   --disturb: #FF2C2C;
   --success: #20ff45;
+}
+
+#payment {
+  justify-content: center;
+  position: absolute;
+  z-index: 1024;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(0.5rem);
+}
+#payment h1 {
+  font-size: 2rem;
+  font-weight: bold;
+}
+#payment a {
+  color: var(--accent);
+}
+
+.premium_sign {
+  margin-left: auto;
+  font-weight: bold;
+  color: var(--success);
 }
 
 input {
@@ -149,6 +174,9 @@ textarea:focus {
 .button.submit {
   background-color: var(--accent);
 }
+.button.premium {
+  color: #ffc020;
+}
 .button.submit.transparent {
   background-color: transparent;
   color: var(--accent);
@@ -188,6 +216,9 @@ textarea:focus {
 
 .vacancy {
   gap: 2rem;
+}
+.vacancy > form {
+  margin-left: auto;
 }
 .vacancy > hr {
   width: 100%;

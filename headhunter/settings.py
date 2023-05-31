@@ -27,7 +27,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     "django-server-production-fac1.up.railway.app",
-    "127.0.0.1"
+    "127.0.0.1",
+    "localhost",
 ]
 
 # OAuth
