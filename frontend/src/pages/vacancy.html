@@ -58,7 +58,7 @@
     {% for candidate in vacancy.candidates.all %}
     <div class="candidate">
         <strong>{{ candidate.first_name }} {{ candidate.last_name }}</strong>
-        <em>{{ candidate.email }}</em>
+        <em>{{ candidate.email }} - {{ candidate.phone_number }}</em>
         <a href="mailto:{{ candidate.email }}" class="button">
             <i class="fi fi-sr-mailbox"></i>
             <span>Надіслати листа</span>
