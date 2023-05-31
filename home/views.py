@@ -104,7 +104,7 @@ def render_vacancy(request: WSGIRequest, vacancy_id: int) -> HttpResponse:
         return redirect(render_home)
     request.session["ORDER_ID"] = f"VACANCY:{GLOBAL_TOKEN}@{vacancy_id}"
     extra = {}
-    if not vacancy.is_premium and request.user.email == vacancy.publisher:
+    if not vacancy.is_premium and request.user.is_authenticated and request.user.email == vacancy.publisher:
         extra = {
             "form": LIQPAY.cnb_form(
                 {
