@@ -21,7 +21,7 @@ def render_home(request: WSGIRequest) -> HttpResponse:
             if request.user.city is None:
                 return redirect(render_sign_up)
 
-            if request.session.get("ORDER_ID"):
+            if request.session.get("ORDER_ID") and request.session.get("ORDER_ID").startswith(str(request.user.id)):
                 response: dict = api.api(
                     "request/",
                     {
@@ -105,7 +105,7 @@ def render_vacancy(request: WSGIRequest, vacancy_id: int) -> HttpResponse:
     vacancy = Vacancy.objects.filter(id=vacancy_id).first()
     if not vacancy:
         return redirect(render_home)
-    request.session["ORDER_ID"] = f"VACANCY:{GLOBAL_TOKEN}@{vacancy_id}"
+    request.session["ORDER_ID"] = f"{request.user.id}|VACANCY:{GLOBAL_TOKEN}@{vacancy_id}"
     extra = {}
     if not vacancy.is_premium and request.user.is_authenticated and request.user.email == vacancy.publisher:
         extra = {
