@@ -50,6 +50,7 @@
     <hr>
     {% endif %}
 </div>
+{% if user.is_authenticated and vacancy.publisher == user.email %}
 <article>
     <h1>Користувачі, які підписани на цю ваканцію:</h1>
 </article>
@@ -65,4 +66,5 @@
     </div>
     {% endfor %}
 </article>
+{% endif %}
 {% endblock body %}
