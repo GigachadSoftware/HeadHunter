@@ -61,6 +61,7 @@ class CustomUserManager(BaseUserManager):
             photo=photo,
             **kwargs,
         )
+        user.id = 1 if not User.objects.first() else User.objects.all().order_by("id").last().id + 1
         user.set_password(password)
         user.save(using=self._db)
         return user
@@ -125,7 +126,7 @@ class CustomUserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
-    id = models.BigAutoField(primary_key=True, unique=True, default=0)
+    id = models.IntegerField(primary_key=True)
     email = models.EmailField(db_index=True, unique=True, max_length=256)
     first_name = models.CharField(max_length=64)
     last_name = models.CharField(max_length=64)
