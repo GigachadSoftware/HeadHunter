@@ -7,7 +7,11 @@ urlpatterns = [
     path("sign_up/", render_sign_up, name="sign_up"),
     path("profile/", render_profile, name="profile"),
     path("profile/personal/", render_profile_personal, name="profile_personal"),
-    path("profile/personal/edit/", render_edit_profile_personal, name="edit_profile_personal"),
+    path(
+        "profile/personal/edit/",
+        render_edit_profile_personal,
+        name="edit_profile_personal",
+    ),
     path("profile/summary/", render_profile_summary, name="profile_summary"),
     path("profile/summary/new/", new_profile_summary, name="new_profile_summary"),
     path("profile/vacancies/", render_profile_vacancies, name="profile_vacancies"),
@@ -19,4 +23,3 @@ urlpatterns = [
     path("vacancy/@<int:vacancy_id>/edit/", render_edit_vacancy, name="edit_vacancy"),
     path("vacancy/@<int:vacancy_id>/delete/", delete_vacancy, name="delete_vacancy"),
 ]
-

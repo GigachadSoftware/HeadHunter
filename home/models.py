@@ -185,7 +185,10 @@ class Vacancy(models.Model):
         return [i for i in WORK_TYPES if i[0] == str(self.type)][0][1]
 
     def get_candidates(self):
-        return [User.objects.filter(id=_id.id).first().email for _id in self.candidates.all()]
+        return [
+            User.objects.filter(id=_id.id).first().email
+            for _id in self.candidates.all()
+        ]
 
 
 class Summary(models.Model):

@@ -10,7 +10,9 @@ from home.forms import NewSummaryForm, SignUpForm, VacancyForm
 from home.models import Summary, User, Vacancy
 
 api = LiqPay("sandbox_i54579029593", "sandbox_EHx0Sf9PVpL9eqE4rcapQHGT2jJj1siOMQgGbPms")
-LIQPAY = LiqPay("sandbox_i54579029593", "sandbox_EHx0Sf9PVpL9eqE4rcapQHGT2jJj1siOMQgGbPms")
+LIQPAY = LiqPay(
+    "sandbox_i54579029593", "sandbox_EHx0Sf9PVpL9eqE4rcapQHGT2jJj1siOMQgGbPms"
+)
 
 
 def render_home(request: WSGIRequest) -> HttpResponse:
@@ -20,22 +22,36 @@ def render_home(request: WSGIRequest) -> HttpResponse:
                 return redirect(render_sign_up)
 
             if request.session.get("ORDER_ID"):
-                response: dict = api.api("request/", {
-                    "action": "status",
-                    "version": "3",
-                    "order_id": request.session.get("ORDER_ID")
-                })
+                response: dict = api.api(
+                    "request/",
+                    {
+                        "action": "status",
+                        "version": "3",
+                        "order_id": request.session.get("ORDER_ID"),
+                    },
+                )
                 if response.get("result") == "ok":
                     order_id: str = request.session.get("ORDER_ID").split("@")[1]
                     request.session["ORDER_ID"] = None
-                    vacancy: Vacancy = None if not order_id.isnumeric() else Vacancy.objects.filter(id=int(order_id)).first()
+                    vacancy: Vacancy = (
+                        None
+                        if not order_id.isnumeric()
+                        else Vacancy.objects.filter(id=int(order_id)).first()
+                    )
                     if vacancy:
                         vacancy.is_premium = True
                         vacancy.save()
-                    return render(request, "pages/home.html", {"page": "home", "order_info": {
-                        "vacancy": vacancy,
-                        "extra": response,
-                    }})
+                    return render(
+                        request,
+                        "pages/home.html",
+                        {
+                            "page": "home",
+                            "order_info": {
+                                "vacancy": vacancy,
+                                "extra": response,
+                            },
+                        },
+                    )
 
         return render(request, "pages/home.html", {"page": "home"})
 
@@ -66,11 +82,11 @@ def render_sign_up(request: WSGIRequest) -> HttpResponse:
             request,
             "pages/sign_up.html",
             {
-                "page" : "user",
-                "form" : {
+                "page": "user",
+                "form": {
                     "phone_number": form.phone_number,
-                    "city"        : form.city,
-                    "birthday"    : form.birthday,
+                    "city": form.city,
+                    "birthday": form.birthday,
                 },
                 "error": "Invalid form!",
             },
@@ -90,21 +106,26 @@ def render_vacancy(request: WSGIRequest, vacancy_id: int) -> HttpResponse:
     extra = {}
     if not vacancy.is_premium and request.user.email == vacancy.publisher:
         extra = {
-            "form": LIQPAY.cnb_form({
-                'action'     : 'pay',
-                'amount'     : '200',
-                'currency'   : 'UAH',
-                'description': f"Активувати Преміум для {vacancy.title}",
-                'order_id'   : f"VACANCY:{GLOBAL_TOKEN}@{vacancy_id}",
-                'version'    : '3',
-                'sandbox'    : 0,
-                'server_url' : 'https://django-server-production-fac1.up.railway.app/',
-            }).replace("""accept-charset="utf-8">""", 'accept-charset="utf-8">').replace(
+            "form": LIQPAY.cnb_form(
+                {
+                    "action": "pay",
+                    "amount": "200",
+                    "currency": "UAH",
+                    "description": f"Активувати Преміум для {vacancy.title}",
+                    "order_id": f"VACANCY:{GLOBAL_TOKEN}@{vacancy_id}",
+                    "version": "3",
+                    "sandbox": 0,
+                    "server_url": "https://django-server-production-fac1.up.railway.app/",
+                }
+            )
+            .replace("""accept-charset="utf-8">""", 'accept-charset="utf-8">')
+            .replace(
                 """<input type="image" src="//static.liqpay3.ua/buttons/p1ru.radius.png" name="btn_text" />""",
                 '<button type="submit" class="button premium">'
                 '<i class="fi fi-sr-crown"></i>'
-                '<span>Активувати Преміум</span>'
-                '</button>')
+                "<span>Активувати Преміум</span>"
+                "</button>",
+            )
         }
     return render(request, "pages/vacancy.html", {"vacancy": vacancy, **extra})
 
@@ -134,7 +155,11 @@ def cancel_vacancy(request: WSGIRequest, vacancy_id: int):
 def delete_vacancy(request: WSGIRequest, vacancy_id: int):
     vacancy = Vacancy.objects.filter(id=vacancy_id).first()
 
-    if not request.user.is_authenticated or not vacancy or not request.user.email == vacancy.publisher:
+    if (
+        not request.user.is_authenticated
+        or not vacancy
+        or not request.user.email == vacancy.publisher
+    ):
         return redirect(render_home)
 
     vacancy.delete()
@@ -150,11 +175,15 @@ def render_edit_vacancy(request: WSGIRequest, vacancy_id: int):
         return redirect(render_home)
 
     if request.method == "GET":
-        return render(request, "pages/edit_vacancy.html", {"page": "user", "vacancy": vacancy})
+        return render(
+            request, "pages/edit_vacancy.html", {"page": "user", "vacancy": vacancy}
+        )
 
     form = VacancyForm(request.POST)
     if not form.is_valid():
-        return render(request, "pages/edit_vacancy.html", {"page": "user", "vacancy": vacancy})
+        return render(
+            request, "pages/edit_vacancy.html", {"page": "user", "vacancy": vacancy}
+        )
 
     vacancy.title = form.cleaned_data.get("title")
     vacancy.city = form.cleaned_data.get("city")
@@ -183,8 +212,8 @@ def render_profile_personal(request: WSGIRequest) -> HttpResponse:
         "pages/profile/personal.html",
         {
             "email_verified": social_account.extra_data.get("email_verified"),
-            "picture"       : social_account.extra_data.get("picture"),
-            "page"          : "user",
+            "picture": social_account.extra_data.get("picture"),
+            "page": "user",
         },
     )
 
@@ -193,7 +222,9 @@ def render_profile_summary(request: WSGIRequest) -> HttpResponse:
     if not request.user.is_authenticated or request.user.role != "W":
         return redirect(render_home)
     summaries = Summary.objects.filter(user_id=request.user.id).all()
-    return render(request, "pages/profile/summary.html", {"summaries": summaries, "page": "user"})
+    return render(
+        request, "pages/profile/summary.html", {"summaries": summaries, "page": "user"}
+    )
 
 
 def new_profile_summary(request: WSGIRequest) -> HttpResponse:
@@ -226,7 +257,11 @@ def render_summary(request: WSGIRequest, summary_id: int) -> HttpResponse:
     return render(
         request,
         "pages/summary.html",
-        {"summary": summary, "owner": User.objects.filter(id=summary.user_id).first(), "page": "summary"},
+        {
+            "summary": summary,
+            "owner": User.objects.filter(id=summary.user_id).first(),
+            "page": "summary",
+        },
     )
 
 
@@ -239,7 +274,11 @@ def render_edit_profile_personal(request: WSGIRequest) -> HttpResponse:
 
     form = SignUpForm(request.POST)
     if not form.is_valid():
-        return render(request, "pages/profile/edit_personal.html", {"page": "user", "error": "Невірна форма"})
+        return render(
+            request,
+            "pages/profile/edit_personal.html",
+            {"page": "user", "error": "Невірна форма"},
+        )
 
     request.user.phone_number = form.cleaned_data.get("phone_number")
     request.user.city = form.cleaned_data.get("city")
@@ -256,7 +295,11 @@ def render_profile_vacancies(request: WSGIRequest):
     if not request.user.is_authenticated or request.user.role != "E":
         return redirect(render_home)
     vacancies = Vacancy.objects.filter(publisher=request.user.email).all()
-    return render(request, "pages/profile/vacancies.html", {"vacancies": vacancies, "page": "user"})
+    return render(
+        request,
+        "pages/profile/vacancies.html",
+        {"vacancies": vacancies, "page": "user"},
+    )
 
 
 def render_new_vacancy(request: WSGIRequest):

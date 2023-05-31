@@ -5,7 +5,21 @@ from home.models import User, Vacancy, Summary
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ["email", "first_name", "last_name", "phone_number", "city", "birthday", "photo", "role", "is_staff", "is_active", "is_superuser", "is_active", "last_login"]
+        fields = [
+            "email",
+            "first_name",
+            "last_name",
+            "phone_number",
+            "city",
+            "birthday",
+            "photo",
+            "role",
+            "is_staff",
+            "is_active",
+            "is_superuser",
+            "is_active",
+            "last_login",
+        ]
 
 
 class VacancySerializer(serializers.ModelSerializer):
@@ -24,7 +38,18 @@ class VacancySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Vacancy
-        fields = ["publisher", "title", "description", "thumbnail", "type", "city", "city_name", "looking_for", "candidates", "creation_time"]
+        fields = [
+            "publisher",
+            "title",
+            "description",
+            "thumbnail",
+            "type",
+            "city",
+            "city_name",
+            "looking_for",
+            "candidates",
+            "creation_time",
+        ]
 
 
 class SummarySerializer(serializers.ModelSerializer):
@@ -43,4 +68,14 @@ class SummarySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Summary
-        fields = ["id", "education", "education_name", "profession", "end_of_education", "skills", "city", "city_name", "view_count"]
+        fields = [
+            "id",
+            "education",
+            "education_name",
+            "profession",
+            "end_of_education",
+            "skills",
+            "city",
+            "city_name",
+            "view_count",
+        ]
