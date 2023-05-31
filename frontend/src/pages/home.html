@@ -2,6 +2,29 @@
 {% load static %}
 
 {% block head %}
+<script defer>
+    function load() {
+        const city_selection = document.querySelector("#city");
+        if (city_selection) {
+            city_selection.childNodes.forEach(option => {
+                if (option.value === city_selection.dataset?.city) {
+                    option.selected = true;
+                }
+            });
+        }
+    }
+
+    function wait() {
+        let city = document.querySelector("#city");
+        if (city) {
+            load();
+        } else {
+            setTimeout(wait, 100);
+        }
+    }
+
+    wait();
+</script>
 {% endblock head %}
 
 {% block body %}
@@ -15,7 +38,12 @@
 <form action="/" method="post" class="row">
 
     <input type="text" name="description" placeholder="Посада" value="{{ form.description }}">
-    <input type="text" name="city" list="cities" placeholder="Місто" value="{{ form.city }}">
+    <div class="select">
+        <select name="city" id="city">
+            {% include "datalists/cities.html" %}
+        </select>
+        <label for="city" class="arrow"></label>
+    </div>
     <div class="select">
         <select name="job_type" id="job_type">
             <option value="" {% if form.job_type == "" %}selected{% endif %}>-- Будь яка зайнятість --</option>
