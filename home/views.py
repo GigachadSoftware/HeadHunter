@@ -99,6 +99,9 @@ def render_sign_up(request: WSGIRequest) -> HttpResponse:
 
 
 def render_vacancy(request: WSGIRequest, vacancy_id: int) -> HttpResponse:
+    if request.user.is_authenticated:
+        if request.user.city is None:
+            return redirect(render_sign_up)
     vacancy = Vacancy.objects.filter(id=vacancy_id).first()
     if not vacancy:
         return redirect(render_home)
@@ -167,6 +170,9 @@ def delete_vacancy(request: WSGIRequest, vacancy_id: int):
 
 
 def render_edit_vacancy(request: WSGIRequest, vacancy_id: int):
+    if request.user.is_authenticated:
+        if request.user.city is None:
+            return redirect(render_sign_up)
     if not request.user.is_authenticated or request.user.role != "E":
         return redirect(render_home)
 
@@ -196,6 +202,9 @@ def render_edit_vacancy(request: WSGIRequest, vacancy_id: int):
 
 
 def render_profile(request: WSGIRequest) -> HttpResponse:
+    if request.user.is_authenticated:
+        if request.user.city is None:
+            return redirect(render_sign_up)
     if not request.user.is_authenticated:
         return redirect(render_home)
 
@@ -203,6 +212,9 @@ def render_profile(request: WSGIRequest) -> HttpResponse:
 
 
 def render_profile_personal(request: WSGIRequest) -> HttpResponse:
+    if request.user.is_authenticated:
+        if request.user.city is None:
+            return redirect(render_sign_up)
     if not request.user.is_authenticated:
         return redirect(render_home)
 
@@ -219,6 +231,9 @@ def render_profile_personal(request: WSGIRequest) -> HttpResponse:
 
 
 def render_profile_summary(request: WSGIRequest) -> HttpResponse:
+    if request.user.is_authenticated:
+        if request.user.city is None:
+            return redirect(render_sign_up)
     if not request.user.is_authenticated or request.user.role != "W":
         return redirect(render_home)
     summaries = Summary.objects.filter(user_id=request.user.id).all()
@@ -228,6 +243,9 @@ def render_profile_summary(request: WSGIRequest) -> HttpResponse:
 
 
 def new_profile_summary(request: WSGIRequest) -> HttpResponse:
+    if request.user.is_authenticated:
+        if request.user.city is None:
+            return redirect(render_sign_up)
     if not request.user.is_authenticated or request.user.role != "W":
         return redirect(render_home)
     if request.method == "GET":
@@ -248,6 +266,9 @@ def new_profile_summary(request: WSGIRequest) -> HttpResponse:
 
 
 def render_summary(request: WSGIRequest, summary_id: int) -> HttpResponse:
+    if request.user.is_authenticated:
+        if request.user.city is None:
+            return redirect(render_sign_up)
     if not request.user.is_authenticated:
         return redirect(render_home)
     summary = Summary.objects.filter(id=summary_id).first()
@@ -266,6 +287,9 @@ def render_summary(request: WSGIRequest, summary_id: int) -> HttpResponse:
 
 
 def render_edit_profile_personal(request: WSGIRequest) -> HttpResponse:
+    if request.user.is_authenticated:
+        if request.user.city is None:
+            return redirect(render_sign_up)
     if not request.user.is_authenticated:
         return redirect(render_home)
 
@@ -292,6 +316,9 @@ def render_edit_profile_personal(request: WSGIRequest) -> HttpResponse:
 
 
 def render_profile_vacancies(request: WSGIRequest):
+    if request.user.is_authenticated:
+        if request.user.city is None:
+            return redirect(render_sign_up)
     if not request.user.is_authenticated or request.user.role != "E":
         return redirect(render_home)
     vacancies = Vacancy.objects.filter(publisher=request.user.email).all()
@@ -303,6 +330,9 @@ def render_profile_vacancies(request: WSGIRequest):
 
 
 def render_new_vacancy(request: WSGIRequest):
+    if request.user.is_authenticated:
+        if request.user.city is None:
+            return redirect(render_sign_up)
     if not request.user.is_authenticated or request.user.role != "E":
         return redirect(render_home)
     if request.method == "GET":
