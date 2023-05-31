@@ -40,6 +40,7 @@
     <input type="text" name="description" placeholder="Посада" value="{{ form.description }}">
     <div class="select">
         <select name="city" id="city">
+            <option value="">----</option>
             {% include "datalists/cities.html" %}
         </select>
         <label for="city" class="arrow"></label>
@@ -58,10 +59,6 @@
         <i class="fi fi-bs-search"></i>
         <span>Пошук</span>
     </button>
-    <datalist id="cities">
-        <option value="">----</option>
-        {% include "datalists/cities.html" %}
-    </datalist>
 </form>
 {% for search_result in search_results %}
 <a class="card" href="/vacancy/@{{ search_result.id }}/">
