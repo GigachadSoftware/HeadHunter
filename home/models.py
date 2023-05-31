@@ -38,6 +38,10 @@ EDUCATIONS_MAP = {
 }
 
 
+def get_user_id():
+    return 1 if not User.objects.first() else User.objects.all().order_by("id").last().id + 1
+
+
 class CustomUserManager(BaseUserManager):
     def _create_user(
         self,
@@ -52,6 +56,7 @@ class CustomUserManager(BaseUserManager):
         **kwargs,
     ) -> "User":
         user = self.model(
+            id=get_user_id(),
             email=self.normalize_email(email),
             first_name=first_name,
             last_name=last_name,
@@ -61,7 +66,6 @@ class CustomUserManager(BaseUserManager):
             photo=photo,
             **kwargs,
         )
-        user.id = 1 if not User.objects.first() else User.objects.all().order_by("id").last().id + 1
         user.set_password(password)
         user.save(using=self._db)
         return user
@@ -126,7 +130,7 @@ class CustomUserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
-    id = models.IntegerField(primary_key=True)
+    id = models.IntegerField(primary_key=True, default=get_user_id)
     email = models.EmailField(db_index=True, unique=True, max_length=256)
     first_name = models.CharField(max_length=64)
     last_name = models.CharField(max_length=64)
