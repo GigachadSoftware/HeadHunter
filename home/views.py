@@ -21,6 +21,7 @@ def render_home(request: WSGIRequest) -> HttpResponse:
             if request.user.city is None:
                 return redirect(render_sign_up)
 
+            print("GET: ", request.session["ORDER_ID"])
             if request.session.get("ORDER_ID") and request.session.get("ORDER_ID").startswith(str(request.user.id)):
                 response: dict = api.api(
                     "request/",
@@ -30,6 +31,7 @@ def render_home(request: WSGIRequest) -> HttpResponse:
                         "order_id": request.session.get("ORDER_ID"),
                     },
                 )
+                print(response)
                 if response.get("result") == "ok":
                     order_id: str = request.session.get("ORDER_ID").split("@")[1]
                     request.session["ORDER_ID"] = None
@@ -106,6 +108,7 @@ def render_vacancy(request: WSGIRequest, vacancy_id: int) -> HttpResponse:
     if not vacancy:
         return redirect(render_home)
     request.session["ORDER_ID"] = f"{request.user.id}|VACANCY:{GLOBAL_TOKEN}@{vacancy_id}"
+    print("SET: ", request.session["ORDER_ID"])
     extra = {}
     if not vacancy.is_premium and request.user.is_authenticated and request.user.email == vacancy.publisher:
         extra = {
@@ -115,7 +118,7 @@ def render_vacancy(request: WSGIRequest, vacancy_id: int) -> HttpResponse:
                     "amount": "200",
                     "currency": "UAH",
                     "description": f"Активувати Преміум для {vacancy.title}",
-                    "order_id": f"VACANCY:{GLOBAL_TOKEN}@{vacancy_id}",
+                    "order_id": f"{request.user.id}|VACANCY:{GLOBAL_TOKEN}@{vacancy_id}",
                     "version": "3",
                     "sandbox": 0,
                     "server_url": "https://django-server-production-fac1.up.railway.app/",

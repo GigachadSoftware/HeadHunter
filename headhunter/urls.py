@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.urls import path, include
 
 
-GLOBAL_TOKEN = "PROD1"
+GLOBAL_TOKEN = "PROD3"
 
 
 urlpatterns = [
